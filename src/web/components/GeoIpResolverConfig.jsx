@@ -26,7 +26,6 @@ const GeoIpResolverConfig = React.createClass({
         enabled: this._getPropConfigValue(props, 'enabled', false),
         db_type: this._getPropConfigValue(props, 'db_type', 'MAXMIND_CITY'),
         db_path: this._getPropConfigValue(props, 'db_path', '/tmp/GeoLite2-City.mmdb'),
-        run_before_extractors: this._getPropConfigValue(props, 'run_before_extractors', false),
       },
     };
   },
@@ -92,9 +91,9 @@ const GeoIpResolverConfig = React.createClass({
   render() {
     return (
       <div>
-        <h3>Geo-Location Filter</h3>
+        <h3>Geo-Location Processor</h3>
 
-        <p>If enabled, the GeoIP filter plugin scans all fields of every message for IPv4 addresses and puts the
+        <p>If enabled, the GeoIP processor plugin scans all fields of every message for IPv4 addresses and puts the
           location information into a field named <code>fieldname_geolocation</code> where "fieldname" is the name
           of the field in which an IP address has been found.</p>
 
@@ -105,8 +104,6 @@ const GeoIpResolverConfig = React.createClass({
           <dd>{this._activeDatabaseType(this.state.config.db_type)}</dd>
           <dt>Database path:</dt>
           <dd>{this.state.config.db_path}</dd>
-          <dt>Run before extractors:</dt>
-          <dd>{this.state.config.run_before_extractors === true ? 'yes' : 'no'}</dd>
         </dl>
 
         <IfPermitted permissions="clusterconfigentry:edit">
@@ -114,14 +111,14 @@ const GeoIpResolverConfig = React.createClass({
         </IfPermitted>
 
         <BootstrapModalForm ref="geoIpConfigModal"
-                            title="Update Geo-Location Filter Configuration"
+                            title="Update Geo-Location Processor Configuration"
                             onSubmitForm={this._saveConfig}
                             onModalClose={this._resetConfig}
                             submitButtonText="Save">
           <fieldset>
             <Input type="checkbox"
                    ref="configEnabled"
-                   label="Enable Geo-Location filter"
+                   label="Enable Geo-Location processor"
                    name="enabled"
                    checked={this.state.config.enabled}
                    onChange={this._onCheckboxClick('enabled', 'configEnabled')}/>
@@ -140,13 +137,6 @@ const GeoIpResolverConfig = React.createClass({
                    name="db_path"
                    value={this.state.config.db_path}
                    onChange={this._onUpdate('db_path')}/>
-            <Input type="checkbox"
-                   ref="configRunBeforeExtractors"
-                   label="Run geo-location filter before running extractors"
-                   help={<span>Enable this to extract geo-location information <strong>before</strong> any extractors have been executed. <strong>WARNING: Changing this setting requires a server restart.</strong></span>}
-                   name="run_before_extractors"
-                   checked={this.state.config.run_before_extractors}
-                   onChange={this._onCheckboxClick('run_before_extractors', 'configRunBeforeExtractors')}/>
           </fieldset>
         </BootstrapModalForm>
       </div>
